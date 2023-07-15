@@ -1,0 +1,15 @@
+{
+  "extends": "./node_modules/gts/tsconfig-google.json",
+  "compilerOptions": {
+    "declaration": false,
+    "rootDir": "./src",
+    "outDir": "dist",
+    "sourceMap": false,
+    "allowSyntheticDefaultImports": true,    
+    "typeRoots": ["./node_modules/@types"]
+  },
+  "include": [
+    "src/**/*.ts",
+    // "test/**/*.ts"
+  ]
+}
