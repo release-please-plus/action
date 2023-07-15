@@ -1,3 +1,4 @@
+/* eslint-disable prettier/prettier */
 import * as core from '@actions/core'
 import { GitHub } from 'release-please/build/src/github'
 import { CreatedRelease, Manifest } from 'release-please/build/src/manifest'
@@ -13,33 +14,34 @@ const GITHUB_GRAPHQL_URL = 'https://api.github.com'
 
 const signoff = core.getInput('signoff') || undefined
 
-function getGitHubInput () {
+function getGitHubInput() {
   return {
     fork: getOptionalBooleanInput('fork'),
     defaultBranch: core.getInput('default-branch') || undefined,
     repoUrl: core.getInput('repo-url') || process.env.GITHUB_REPOSITORY,
     apiUrl: core.getInput('github-api-url') || GITHUB_API_URL,
-    graphqlUrl: (core.getInput('github-graphql-url') || '').replace(/\/graphql$/, '') || GITHUB_GRAPHQL_URL,
+    graphqlUrl:
+      (core.getInput('github-graphql-url') || '').replace(/\/graphql$/, '') || GITHUB_GRAPHQL_URL,
     token: core.getInput('token', { required: true }),
     proxyServer: core.getInput('proxy-server') || undefined
   }
 }
 
-function getOptionalBooleanInput (name: string) {
+function getOptionalBooleanInput(name: string) {
   if (core.getInput(name) === '') {
     return undefined
   }
   return core.getBooleanInput(name)
 }
 
-function getOptionalMultilineInput (name: string) {
+function getOptionalMultilineInput(name: string) {
   if (core.getInput(name) === '') {
     return undefined
   }
   return core.getMultilineInput(name)
 }
 
-function getManifestInput () {
+function getManifestInput() {
   return {
     configFile: core.getInput('config-file') || CONFIG_FILE,
     manifestFile: core.getInput('manifest-file') || MANIFEST_FILE,
@@ -47,7 +49,7 @@ function getManifestInput () {
   }
 }
 
-async function runManifest (command: string) {
+async function runManifest(command: string) {
   // Create the Manifest and GitHub instance from
   // argument provided to GitHub action:
   const { fork } = getGitHubInput()
@@ -80,7 +82,7 @@ async function runManifest (command: string) {
   outputPRs(await manifest.createPullRequests())
 }
 
-async function main () {
+export async function main() {
   const command = core.getInput('command') || undefined
   if (command && MANIFEST_COMMANDS.includes(command)) {
     return await runManifest(command)
@@ -106,12 +108,13 @@ const releasePlease = {
   main
 }
 
-function getGitHubInstance () {
+function getGitHubInstance() {
   const { token, defaultBranch, apiUrl, graphqlUrl, repoUrl, proxyServer } = getGitHubInput()
   let owner = ''
   let repo = ''
   if (repoUrl) {
-    [owner, repo] = repoUrl.split('/')
+    // eslint-disable-next-line @typescript-eslint/no-extra-semi
+    ;[owner, repo] = repoUrl.split('/')
   }
 
   let proxy
@@ -132,7 +135,7 @@ function getGitHubInstance () {
   return GitHub.create(githubCreateOpts)
 }
 
-async function manifestInstance (github: GitHub) {
+async function manifestInstance(github: GitHub) {
   const { fork } = getGitHubInput()
   const bumpMinorPreMajor = getOptionalBooleanInput('bump-minor-pre-major')
   const bumpPatchForMinorPreMajor = getOptionalBooleanInput('bump-patch-for-minor-pre-major')
@@ -168,7 +171,8 @@ async function manifestInstance (github: GitHub) {
   const releaseLabels = getOptionalMultilineInput('release-labels')
   const skipLabeling = getOptionalBooleanInput('skip-labeling')
   const sequentialCalls = getOptionalBooleanInput('sequential-calls')
-  const groupPullRequestTitlePattern = core.getInput('group-pull-request-title-pattern') || undefined
+  const groupPullRequestTitlePattern =
+    core.getInput('group-pull-request-title-pattern') || undefined
   const releaseSearchDepth = +core.getInput('release-search-depth') || undefined
   const commitSearchDepth = +core.getInput('commit-search-depth') || undefined
   return await Manifest.fromConfig(
@@ -223,9 +227,9 @@ async function manifestInstance (github: GitHub) {
   )
 }
 
-function outputReleases (inputReleases: (CreatedRelease | undefined)[]) {  
+function outputReleases(inputReleases: (CreatedRelease | undefined)[]) {
   const releases = inputReleases.filter(release => release !== undefined) as CreatedRelease[]
-  const pathsReleased = []
+  const pathsReleased = [] as string[]
   if (releases.length) {
     core.setOutput('releases_created', true)
     for (const release of releases) {
@@ -240,6 +244,7 @@ function outputReleases (inputReleases: (CreatedRelease | undefined)[]) {
           core.setOutput(`${path}--release_created`, true)
         }
       }
+      // eslint-disable-next-line prefer-const
       for (let [key, val] of Object.entries(release)) {
         // Historically tagName was output as tag_name, keep this
         // consistent to avoid breaking change:
@@ -260,7 +265,7 @@ function outputReleases (inputReleases: (CreatedRelease | undefined)[]) {
   core.setOutput('paths_released', JSON.stringify(pathsReleased))
 }
 
-function outputPRs (prs: (PullRequest | undefined)[]) {
+function outputPRs(prs: (PullRequest | undefined)[]) {
   prs = prs.filter(pr => pr !== undefined)
   if (prs.length) {
     core.setOutput('pr', prs[0])
@@ -276,4 +281,3 @@ if (require.main === module) {
 } else {
   module.exports = releasePlease
 }
-
