@@ -1,62 +1,70 @@
-# Release Please Action
+# Release Please Plus Action
 
 [![Conventional Commits](https://img.shields.io/badge/Conventional%20Commits-1.0.0-yellow.svg)](https://conventionalcommits.org)
 
 Automate releases with Conventional Commit Messages.
 
+# 🚧👷 UNDER ACTIVE DEVELOPMENT 👷🚧
+
+> release-please-plus is a fork of release-please and is not maintained by the same team as release-please.
+
+I really like the original Release Please, but there are a lot of changes I'd like to make.
+
+Since it is used by Google across their systems, changes are very understandably slow. I decided to make a fork to allow for faster iterations and fixes.
+
 ## Setting up this action
 
 1. If you haven't already done so, create a `.github/workflows` folder in your
-  repository (_this is where your actions will live_).
-2. Now create a `.github/workflows/release-please.yml` file with these contents:
+   repository (_this is where your actions will live_).
+2. Now create a `.github/workflows/release-please-plus.yml` file with these contents:
 
-    ```yaml
-    on:
-      push:
-        branches:
-          - main
+   ```yaml
+   on:
+     push:
+       branches:
+         - main
 
-    permissions:
-      contents: write
-      pull-requests: write
+   permissions:
+     contents: write
+     pull-requests: write
 
-    name: release-please
+   name: release-please-plus
 
-    jobs:
-      release-please:
-        runs-on: ubuntu-latest
-        steps:
-          - uses: google-github-actions/release-please-action@v3
-            with:
-              release-type: node
-              package-name: release-please-action
-    ```
+   jobs:
+     release-please:
+       runs-on: ubuntu-latest
+       steps:
+         - uses: release-please-plus/action@main
+           with:
+             release-type: node
+             package-name: release-please-plus-action
+   ```
 
 3. Merge the above action into your repository and make sure new commits follow
-  the [Conventional Commits](https://www.conventionalcommits.org/en/v1.0.0/)
-  convention, [release-please](https://github.com/googleapis/release-please)
-  will start creating Release PRs for you.
+   the [Conventional Commits](https://www.conventionalcommits.org/en/v1.0.0/)
+   convention, [release-please](https://github.com/googleapis/release-please)
+   will start creating Release PRs for you.
 4. For an alternative configuration that provides easier bootstrapping options
-  for initial setup, follow [these instructions](https://github.com/googleapis/release-please/blob/master/docs/manifest-releaser.md)
-  (ignore the cli section) and then configure this action as follows:
+   for initial setup, follow [these instructions](https://github.com/googleapis/release-please/blob/master/docs/manifest-releaser.md)
+   (ignore the cli section) and then configure this action as follows:
 
-    ```yaml
-    #...(same as above)
-        steps:
-          - uses: google-github-actions/release-please-action@v3
-            with:
-              command: manifest
-    ```
+   ```yaml
+   #...(same as above)
+   steps:
+     - uses: google-github-actions/release-please-action@v3
+       with:
+         command: manifest
+   ```
 
 ## Configuration
 
 |               input                | description                                                                                                                                                                                                                                                                                                                                                   |
-|:----------------------------------:|---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| :--------------------------------: | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
 |              `token`               | A GitHub secret token, the action defaults to using the special `secrets.GITHUB_TOKEN`                                                                                                                                                                                                                                                                        |
 |           `release-type`           | What type of project is this a release for? Reference [Release types supported](#release-types-supported); new types of releases can be [added here](https://github.com/googleapis/release-please/tree/main/src/strategies)                                                                                                                                   |
 |           `package-name`           | A name for the artifact releases are being created for (this might be the `name` field in a `setup.py` or `package.json`)                                                                                                                                                                                                                                     |
-|       `bump-minor-pre-major`       | Should breaking changes before 1.0.0 produce minor bumps?  Default `false`                                                                                                                                                                                                                                                                                    |
-|  `bump-patch-for-minor-pre-major`  | Should feat changes before 1.0.0 produce patch bumps instead of minor bumps?  Default `false`                                                                                                                                                                                                                                                                 |
+|       `bump-minor-pre-major`       | Should breaking changes before 1.0.0 produce minor bumps? Default `false`                                                                                                                                                                                                                                                                                     |
+|  `bump-patch-for-minor-pre-major`  | Should feat changes before 1.0.0 produce patch bumps instead of minor bumps? Default `false`                                                                                                                                                                                                                                                                  |
 |               `path`               | create a release from a path other than the repository's root                                                                                                                                                                                                                                                                                                 |
 |          `monorepo-tags`           | add prefix to tags and branches, allowing multiple libraries to be released from the same repository.                                                                                                                                                                                                                                                         |
 |         `changelog-types`          | A JSON formatted String containing to override the outputted changelog sections                                                                                                                                                                                                                                                                               |
@@ -66,34 +74,34 @@ Automate releases with Conventional Commit Messages.
 |             `command`              | release-please command to run, either `github-release`, or `release-pr`, `manifest`, `manifest-pr` (_defaults to running both_)                                                                                                                                                                                                                               |
 |          `default-branch`          | branch to open pull release PR against (detected by default)                                                                                                                                                                                                                                                                                                  |
 |    `pull-request-title-pattern`    | title pattern used to make release PR, defaults to using `chore${scope}: release${component} ${version}`.                                                                                                                                                                                                                                                     |
-|        `pull-request-header`       | header used within the release PR body, defaults to using `:robot: I have created a release *beep* *boop*`.                                                                                                                                                                                                                                                     |
+|       `pull-request-header`        | header used within the release PR body, defaults to using `:robot: I have created a release *beep* *boop*`.                                                                                                                                                                                                                                                   |
 |          `changelog-path`          | configure alternate path for `CHANGELOG.md`. Default `CHANGELOG.md`                                                                                                                                                                                                                                                                                           |
 |          `github-api-url`          | configure github API URL. Default `https://api.github.com`                                                                                                                                                                                                                                                                                                    |
 |             `signoff`              | Add [`Signed-off-by`](https://git-scm.com/docs/git-commit#Documentation/git-commit.txt---signoff) line at the end of the commit log message using the user and email provided. (format "Name \<email@example.com\>")                                                                                                                                          |
 |             `repo-url`             | configure github repository URL. Default `process.env.GITHUB_REPOSITORY`                                                                                                                                                                                                                                                                                      |
 |        `github-graphql-url`        | configure github GraphQL URL. Default `https://api.github.com`                                                                                                                                                                                                                                                                                                |
 |       `changelog-notes-type`       | Strategy for building the [changelog contents](https://github.com/googleapis/release-please/blob/main/docs/customizing.md#changelog-types). Default `default`. Called `changelog-type` in release-please documentation.                                                                                                                                       |
- |          `changelog-host`          | Host for commit hyperlinks in the changelog. Default `https://github.com`                                                                                                                                                                                                                                                                                     |
+|          `changelog-host`          | Host for commit hyperlinks in the changelog. Default `https://github.com`                                                                                                                                                                                                                                                                                     |
 |       `versioning-strategy`        | Override [method of determining SemVer version bumps based on commits](https://github.com/googleapis/release-please/blob/main/docs/customizing.md#versioning-strategies). Default `default`                                                                                                                                                                   |
- |            `release-as`            | manually set version to this value, ignoring conventional commits. Absence defaults to conventional commits derived next version. Once the release PR is merged you should either remove this or update it to a higher version. Otherwise subsequent `manifest-pr` runs will continue to use this version even though it was already set in the last release. |
- |       `skip-github-release`        | Skip creating GitHub Releases. Default `false`                                                                                                                                                                                                                                                                                                                |
+|            `release-as`            | manually set version to this value, ignoring conventional commits. Absence defaults to conventional commits derived next version. Once the release PR is merged you should either remove this or update it to a higher version. Otherwise subsequent `manifest-pr` runs will continue to use this version even though it was already set in the last release. |
+|       `skip-github-release`        | Skip creating GitHub Releases. Default `false`                                                                                                                                                                                                                                                                                                                |
 |            `prerelease`            | If set, create releases that are pre-major or pre-release version marked as pre-release on Github. Defaults `false`                                                                                                                                                                                                                                           |
- |            `component`             | Name of the component used for branch naming and release tagging. Defaults to a normalized version based on the package name                                                                                                                                                                                                                                  |
- |         `include-v-in-tag`         | include "v" in tag versions. Default `true`                                                                                                                                                                                                                                                                                                                   |
- |          `tag-separator`           | configures separator character used in release tag                                                                                                                                                                                                                                                                                                            |
- |         `snapshot-labels`          | sets java snapshot pull request labels other than `autorelease: snapshot`                                                                                                                                                                                                                                                                                     |
- |          `bootstrap-sha`           | if this is the first time running `manifest-pr` on a repo this key will limit how far back (exclusive) to pull commits for conventional commit parsing, see (the manifest releaser docs)[https://github.com/googleapis/release-please/blob/main/docs/manifest-releaser.md]                                                                                    |
- |         `last-release-sha`         | overrides the commit sha release-please will use from which to gather commits for the current release, see (the manifest releaser docs)[https://github.com/googleapis/release-please/blob/main/docs/manifest-releaser.md]                                                                                                                                     |
- |        `always-link-local`         | when using the `node-workspace` plugin, setting to false will only bump your local dependencies within the SemVer range, see (the manifest releaser docs)[https://github.com/googleapis/release-please/blob/main/docs/manifest-releaser.md] . Default `true`.                                                                                                 |
- |      `separate-pull-requests`      | create separate pull requests for each package instead of a single manifest release pull request, see (the manifest releaser docs)[https://github.com/googleapis/release-please/blob/main/docs/manifest-releaser.md]. Default `false`.                                                                                                                        |
- |             `plugins`              | see https://github.com/googleapis/release-please/blob/main/docs/manifest-releaser.md#plugins                                                                                                                                                                                                                                                                  |
- |              `labels`              | list of labels to apply to the release pull requests, defaults to `autorelease: pending`                                                                                                                                                                                                                                                                      |
+|            `component`             | Name of the component used for branch naming and release tagging. Defaults to a normalized version based on the package name                                                                                                                                                                                                                                  |
+|         `include-v-in-tag`         | include "v" in tag versions. Default `true`                                                                                                                                                                                                                                                                                                                   |
+|          `tag-separator`           | configures separator character used in release tag                                                                                                                                                                                                                                                                                                            |
+|         `snapshot-labels`          | sets java snapshot pull request labels other than `autorelease: snapshot`                                                                                                                                                                                                                                                                                     |
+|          `bootstrap-sha`           | if this is the first time running `manifest-pr` on a repo this key will limit how far back (exclusive) to pull commits for conventional commit parsing, see (the manifest releaser docs)[https://github.com/googleapis/release-please/blob/main/docs/manifest-releaser.md]                                                                                    |
+|         `last-release-sha`         | overrides the commit sha release-please will use from which to gather commits for the current release, see (the manifest releaser docs)[https://github.com/googleapis/release-please/blob/main/docs/manifest-releaser.md]                                                                                                                                     |
+|        `always-link-local`         | when using the `node-workspace` plugin, setting to false will only bump your local dependencies within the SemVer range, see (the manifest releaser docs)[https://github.com/googleapis/release-please/blob/main/docs/manifest-releaser.md] . Default `true`.                                                                                                 |
+|      `separate-pull-requests`      | create separate pull requests for each package instead of a single manifest release pull request, see (the manifest releaser docs)[https://github.com/googleapis/release-please/blob/main/docs/manifest-releaser.md]. Default `false`.                                                                                                                        |
+|             `plugins`              | see https://github.com/googleapis/release-please/blob/main/docs/manifest-releaser.md#plugins                                                                                                                                                                                                                                                                  |
+|              `labels`              | list of labels to apply to the release pull requests, defaults to `autorelease: pending`                                                                                                                                                                                                                                                                      |
 |          `release-labels`          | set a pull request label other than `autorelease: tagged`                                                                                                                                                                                                                                                                                                     |
- |          `skip-labeling`           | if set, labels will not be applied to pull requests. Default `false`.                                                                                                                                                                                                                                                                                         |
- |         `sequential-calls`         | issue GitHub API requests sequentially rather than concurrently, see (the manifest releaser docs)[https://github.com/googleapis/release-please/blob/main/docs/manifest-releaser.md]. Default `false`                                                                                                                                                          |
- | `group-pull-request-title-pattern` | sets the manifest pull request title for when releasing multiple packages grouped together in the one pull request                                                                                                                                                                                                                                            |
- |       `release-search-depth`       | when searching for the latest release SHAs, only consider the last N releases                                                                                                                                                                                                                                                                                 |
- |       `commit-search-depth`        | when fetching the list of commits to consider, only consider the last N commits                                                                                                                                                                                                                                                                               |
+|          `skip-labeling`           | if set, labels will not be applied to pull requests. Default `false`.                                                                                                                                                                                                                                                                                         |
+|         `sequential-calls`         | issue GitHub API requests sequentially rather than concurrently, see (the manifest releaser docs)[https://github.com/googleapis/release-please/blob/main/docs/manifest-releaser.md]. Default `false`                                                                                                                                                          |
+| `group-pull-request-title-pattern` | sets the manifest pull request title for when releasing multiple packages grouped together in the one pull request                                                                                                                                                                                                                                            |
+|       `release-search-depth`       | when searching for the latest release SHAs, only consider the last N releases                                                                                                                                                                                                                                                                                 |
+|       `commit-search-depth`        | when fetching the list of commits to consider, only consider the last N commits                                                                                                                                                                                                                                                                               |
 |           `proxy-server`           | set proxy sever when you run this action behind a proxy. format is host:port e.g. proxy-host.com:8080                                                                                                                                                                                                                                                         |
 
 ## GitHub credentials
@@ -104,6 +112,7 @@ created by `release-please` (release tag or release pull request) will not trigg
 workflows.
 
 From the [docs](https://docs.github.com/en/actions/using-workflows/triggering-a-workflow#triggering-a-workflow-from-a-workflow):
+
 > When you use the repository's `GITHUB_TOKEN` to perform tasks, events triggered by the `GITHUB_TOKEN` will not create a new workflow run. This prevents you from accidentally creating recursive workflow runs.
 
 This means that GitHub actions CI checks will not run on the release pull request and workflows normally triggered by
@@ -112,7 +121,9 @@ This means that GitHub actions CI checks will not run on the release pull reques
 if you want other workflows to run.
 
 ### The `command` option
+
 Some additional info regarding the `command` property.
+
 - `github-release`: creates GitHub releases (as mentioned [here](https://docs.github.com/en/repositories/releasing-projects-on-github/about-releases)) based on the most recently merged release PR and the release strategy being used.
 - `release-pr`: uses Conventional Commits to propose a candidate release [pull request](#how-release-please-works). This pull request, once merged, is used by `github-release`/`manifest`
 - `manifest`: use [source controlled files](https://github.com/googleapis/release-please/blob/main/docs/manifest-releaser.md#manifest-driven-release-please) containing releaser specific configuration (the `release-please-config.json`) as well package version tracking (the `.release-please-manifest.json`).
@@ -120,7 +131,7 @@ Some additional info regarding the `command` property.
 
 ### Workflow Permissions
 
-This workflow will need the following permissions in your workflow file: 
+This workflow will need the following permissions in your workflow file:
 
 ```yml
 permissions:
@@ -128,7 +139,7 @@ permissions:
   pull-requests: write
 ```
 
-For more information about permissions: 
+For more information about permissions:
 
 - github apis [protected by `contents` permission](https://docs.github.com/en/rest/overview/permissions-required-for-github-apps?apiVersion=2022-11-28#contents)
 - github apis [protected by `pull_requests` permission](https://docs.github.com/en/rest/overview/permissions-required-for-github-apps?apiVersion=2022-11-28#pull-requests)
@@ -140,38 +151,39 @@ For more information about permissions:
 
 Release Please automates releases for the following flavors of repositories:
 
-| release type | description |
-|:---:|---|
-| `elixir` | An elixir repository with a mix.exs and a CHANGELOG.md |
-| `go` | Go repository, with a CHANGELOG.md |
-| `helm` | A helm chart repository with a Chart.yaml and a CHANGELOG.md |
-| `java` | [A strategy that generates SNAPSHOT version after each release](https://github.com/googleapis/release-please/blob/main/docs/java.md) |
-| `maven` | [Strategy for Maven projects, generates SNAPSHOT version after each release and updates `pom.xml` automatically](https://github.com/googleapis/release-please/blob/main/docs/java.md) |
-| `node` | [A Node.js repository, with a package.json and CHANGELOG.md](https://github.com/yargs/yargs) |
-| `ocaml` | [An OCaml repository, containing 1 or more opam or esy files and a CHANGELOG.md](https://github.com/grain-lang/binaryen.ml) |
-| `python` | [A Python repository, with a setup.py, setup.cfg, version.py and CHANGELOG.md](https://github.com/googleapis/python-storage) and optionally a pyproject.toml and a &lt;project&gt;/\_\_init\_\_.py |
-| `php` | [A php composer package with composer.json and CHANGELOG.md](https://github.com/setnemo/asterisk-notation)
-| `ruby` | [A Ruby repository, with version.rb and CHANGELOG.md](https://github.com/google/google-id-token) |
-| `rust` | A Rust repository, with a Cargo.toml (either as a crate or workspace) and a CHANGELOG.md |
-| `sfdx` | A repository with a [sfdx-project.json](https://developer.salesforce.com/docs/atlas.en-us.sfdx_dev.meta/sfdx_dev/sfdx_dev_ws_config.htm) and a CHANGELOG.md |
-| `simple` | [A repository with a version.txt and a CHANGELOG.md](https://github.com/googleapis/gapic-generator) |
-| `terraform-module` | [A terraform module, with a version in the README.md, and a CHANGELOG.md](https://github.com/terraform-google-modules/terraform-google-project-factory) |
+|    release type    | description                                                                                                                                                                                        |
+| :----------------: | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+|      `elixir`      | An elixir repository with a mix.exs and a CHANGELOG.md                                                                                                                                             |
+|        `go`        | Go repository, with a CHANGELOG.md                                                                                                                                                                 |
+|       `helm`       | A helm chart repository with a Chart.yaml and a CHANGELOG.md                                                                                                                                       |
+|       `java`       | [A strategy that generates SNAPSHOT version after each release](https://github.com/googleapis/release-please/blob/main/docs/java.md)                                                               |
+|      `maven`       | [Strategy for Maven projects, generates SNAPSHOT version after each release and updates `pom.xml` automatically](https://github.com/googleapis/release-please/blob/main/docs/java.md)              |
+|       `node`       | [A Node.js repository, with a package.json and CHANGELOG.md](https://github.com/yargs/yargs)                                                                                                       |
+|      `ocaml`       | [An OCaml repository, containing 1 or more opam or esy files and a CHANGELOG.md](https://github.com/grain-lang/binaryen.ml)                                                                        |
+|      `python`      | [A Python repository, with a setup.py, setup.cfg, version.py and CHANGELOG.md](https://github.com/googleapis/python-storage) and optionally a pyproject.toml and a &lt;project&gt;/\_\_init\_\_.py |
+|       `php`        | [A php composer package with composer.json and CHANGELOG.md](https://github.com/setnemo/asterisk-notation)                                                                                         |
+|       `ruby`       | [A Ruby repository, with version.rb and CHANGELOG.md](https://github.com/google/google-id-token)                                                                                                   |
+|       `rust`       | A Rust repository, with a Cargo.toml (either as a crate or workspace) and a CHANGELOG.md                                                                                                           |
+|       `sfdx`       | A repository with a [sfdx-project.json](https://developer.salesforce.com/docs/atlas.en-us.sfdx_dev.meta/sfdx_dev/sfdx_dev_ws_config.htm) and a CHANGELOG.md                                        |
+|      `simple`      | [A repository with a version.txt and a CHANGELOG.md](https://github.com/googleapis/gapic-generator)                                                                                                |
+| `terraform-module` | [A terraform module, with a version in the README.md, and a CHANGELOG.md](https://github.com/terraform-google-modules/terraform-google-project-factory)                                            |
 
 ## Outputs
+
 > Properties that are available after the action executed.
 
-| output | description |
-|:---:|---|
-| `releases_created` | `true` if the release was created, `false` otherwise |
-| `upload_url` | Directly related to [**Create a release**](https://developer.github.com/v3/repos/releases/#response-4) API |
-| `html_url` | Directly related to [**Create a release**](https://developer.github.com/v3/repos/releases/#response-4) API |
-| `tag_name` | Directly related to [**Create a release**](https://developer.github.com/v3/repos/releases/#response-4) API |
-| `major` | Number representing major semver value |
-| `minor` | Number representing minor semver value |
-| `patch` | Number representing patch semver value |
-| `sha` | sha that a GitHub release was tagged at |
-| `pr` | The JSON string of the [PullRequest object](https://github.com/googleapis/release-please/blob/main/src/pull-request.ts#L15) (undefined if no release created) |
-| `prs` | The JSON string of the array of [PullRequest objects](https://github.com/googleapis/release-please/blob/main/src/pull-request.ts#L15) (undefined if no release created) |
+|       output       | description                                                                                                                                                             |
+| :----------------: | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `releases_created` | `true` if the release was created, `false` otherwise                                                                                                                    |
+|    `upload_url`    | Directly related to [**Create a release**](https://developer.github.com/v3/repos/releases/#response-4) API                                                              |
+|     `html_url`     | Directly related to [**Create a release**](https://developer.github.com/v3/repos/releases/#response-4) API                                                              |
+|     `tag_name`     | Directly related to [**Create a release**](https://developer.github.com/v3/repos/releases/#response-4) API                                                              |
+|      `major`       | Number representing major semver value                                                                                                                                  |
+|      `minor`       | Number representing minor semver value                                                                                                                                  |
+|      `patch`       | Number representing patch semver value                                                                                                                                  |
+|       `sha`        | sha that a GitHub release was tagged at                                                                                                                                 |
+|        `pr`        | The JSON string of the [PullRequest object](https://github.com/googleapis/release-please/blob/main/src/pull-request.ts#L15) (undefined if no release created)           |
+|       `prs`        | The JSON string of the array of [PullRequest objects](https://github.com/googleapis/release-please/blob/main/src/pull-request.ts#L15) (undefined if no release created) |
 
 ## How release please works
 
@@ -196,15 +208,15 @@ Release Please assumes you are using [Conventional Commit messages](https://www.
 
 The most important prefixes you should have in mind are:
 
-* `fix:` which represents bug fixes, and correlates to a [SemVer](https://semver.org/)
+- `fix:` which represents bug fixes, and correlates to a [SemVer](https://semver.org/)
   patch.
-* `feat:` which represents a new feature, and correlates to a SemVer minor.
-* `feat!:`,  or `fix!:`, `refactor!:`, etc., which represent a breaking change
+- `feat:` which represents a new feature, and correlates to a SemVer minor.
+- `feat!:`, or `fix!:`, `refactor!:`, etc., which represent a breaking change
   (indicated by the `!`) and will result in a SemVer major.
 
 ### Overriding the Changelog Sections
 
-To output more commit information in the changelog,  a JSON formatted String can be added to the Action using the `changelog-types` input parameter.  This could look something like this:
+To output more commit information in the changelog, a JSON formatted String can be added to the Action using the `changelog-types` input parameter. This could look something like this:
 
 ```yaml
 on:
@@ -229,6 +241,7 @@ jobs:
 To configure, simply configure multiple workflows that specify a different `default-branch`:
 
 Configuration for `main` (default) branch (`.github/workflows/release-main.yaml`):
+
 ```yaml
 on:
   push:
@@ -246,6 +259,7 @@ jobs:
 ```
 
 Configuration for `1.x` (default) branch (`.github/workflows/release-1.x.yaml`):
+
 ```yaml
 on:
   push:
@@ -302,7 +316,7 @@ jobs:
 ```
 
 > So that you can keep 2FA enabled for npm publications, we recommend setting
-`registry-url` to your own [Wombat Dressing Room](https://github.com/GoogleCloudPlatform/wombat-dressing-room) deployment.
+> `registry-url` to your own [Wombat Dressing Room](https://github.com/GoogleCloudPlatform/wombat-dressing-room) deployment.
 
 ## Creating major/minor tags
 
@@ -424,8 +438,7 @@ jobs:
         if: ${{ steps.release.outputs.release_created }}
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        run:
-          gh release upload ${{ steps.release.outputs.tag_name }} ./artifact/some-build-artifact.zip
+        run: gh release upload ${{ steps.release.outputs.tag_name }} ./artifact/some-build-artifact.zip
 ```
 
 ## License
