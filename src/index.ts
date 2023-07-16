@@ -1,7 +1,7 @@
 /* eslint-disable prettier/prettier */
 import * as core from '@actions/core'
 import { GitHub } from 'release-please/build/src/github'
-import { CreatedRelease, Manifest } from 'release-please/build/src/manifest'
+import { Manifest } from 'release-please/build/src/manifest'
 import { PullRequest } from 'release-please/build/src/pull-request'
 
 const CONFIG_FILE = 'release-please-config.json'
@@ -13,7 +13,25 @@ const GITHUB_API_URL = 'https://api.github.com'
 const GITHUB_GRAPHQL_URL = 'https://api.github.com'
 
 const signoff = core.getInput('signoff') || undefined
+export interface GitHubRelease {
+  id: number
+  name?: string
+  tagName: string
+  sha: string
+  notes?: string
+  url: string
+  draft?: boolean
+  uploadUrl?: string
+}
 
+interface CreatedRelease extends GitHubRelease {
+  id: number
+  path: string
+  version: string
+  major: number
+  minor: number
+  patch: number
+}
 function getGitHubInput() {
   return {
     fork: getOptionalBooleanInput('fork'),
