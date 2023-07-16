@@ -1,6 +1,6 @@
-name: 'release-please-action'
+name: 'release-please-plus-action'
 description: 'automated releases based on conventional commits'
-author: Google LLC
+author: John Campion
 inputs:
   token:
     description: 'GitHub token for creating and grooming release PRs, defaults to using secrets.GITHUB_TOKEN'
@@ -101,7 +101,7 @@ inputs:
     description: 'mark pull request as a draft'
     required: false
   changelog-notes-type:
-    description: "Strategy for building the changelog contents(see https://github.com/googleapis/release-please/blob/main/docs/customizing.md#changelog-types). Default `default`. Called `changelog-type` in release-please documentation."
+    description: 'Strategy for building the changelog contents(see https://github.com/googleapis/release-please/blob/main/docs/customizing.md#changelog-types). Default `default`. Called `changelog-type` in release-please documentation.'
     required: false
   versioning-strategy:
     description: 'Override method of determining SemVer version bumps based on commits (drr https://github.com/googleapis/release-please/blob/main/docs/customizing.md#versioning-strategies). Default `default`'
