@@ -29,5 +29,4 @@ jobs:
         run: npm run build
       - uses: stefanzweifel/git-auto-commit-action@v4
         with:
-          file_pattern: 'dist/**/*'
           commit_message: 'chore: build dist'
