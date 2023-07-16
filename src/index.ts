@@ -1,8 +1,8 @@
 /* eslint-disable prettier/prettier */
 import * as core from '@actions/core'
-import { GitHub } from 'release-please/build/src/github'
-import { Manifest } from 'release-please/build/src/manifest'
-import { PullRequest } from 'release-please/build/src/pull-request'
+import { GitHub } from 'release-please-plus/build/src/github'
+import { Manifest } from 'release-please-plus/build/src/manifest'
+import { PullRequest } from 'release-please-plus/build/src/pull-request'
 
 const CONFIG_FILE = 'release-please-config.json'
 const MANIFEST_FILE = '.release-please-manifest.json'

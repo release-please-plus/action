@@ -4,7 +4,7 @@ import * as action from '../src'
 import 'jest-extended'
 const core = require('@actions/core')
 
-import { Manifest } from 'release-please/build/src/manifest'
+import { Manifest } from 'release-please-plus/build/src/manifest'
 // const { Node } = require('release-please/build/src/strategies/node')
 // As defined in action.yml
 
@@ -66,7 +66,7 @@ const server = setupServer(
   })
 )
 
-describe('release-please-action', () => {
+describe('release-please-plus-action', () => {
   beforeEach(() => {
     input = {}
     output = {}
