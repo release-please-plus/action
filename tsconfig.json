@@ -1,14 +1,27 @@
 {
-  "extends": "./node_modules/gts/tsconfig-google.json",
   "compilerOptions": {
-    "declaration": false,
-    // "rootDir": "./src",
-    "outDir": "build",
-    "sourceMap": true,
-    "skipLibCheck": true,
-    "noImplicitAny": false,
     "allowSyntheticDefaultImports": true,
-    "types": ["jest", "jest-extended"]
+    "esModuleInterop": true,
+    // "rootDir": ".",
+    "outDir": "build",
+    "typeRoots": ["./typings", "./node_modules/@types"],
+    "allowUnreachableCode": false,
+    "allowUnusedLabels": false,
+    "declaration": false,
+    "forceConsistentCasingInFileNames": true,
+    "lib": ["es2018"],
+    "module": "commonjs",
+    "noEmitOnError": true,
+    "noFallthroughCasesInSwitch": true,
+    "noImplicitReturns": true,
+    "pretty": true,
+    "sourceMap": true,
+    "strict": true,
+    "target": "es2018",
+    "types": ["jest", "jest-extended"],
+    "skipLibCheck": true,
+    "noImplicitAny": false
   },
+  "exclude": ["node_modules"],
   "include": ["src/**/*.ts"]
 }
